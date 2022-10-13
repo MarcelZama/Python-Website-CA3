@@ -41,7 +41,7 @@ def convert2range(v, f_min, f_max, t_min, t_max):
 CHARTS = "charts/"
 
 
-def produce_bar_chart(fn):
+def produce_bar_chart(fn, location=CHARTS):
     swimmer, age, distance, stroke, average, average_str, times, converts = get_swim_data(fn)
     
     title = f"{swimmer} (Under {age}) {distance} {stroke}"
@@ -75,7 +75,7 @@ def produce_bar_chart(fn):
     """    
 
     page = header + body + footer
-    save_to = f"{CHARTS}{fn.removesuffix('.txt')}.html"
+    save_to = f"{location}{fn.removesuffix('.txt')}.html"
     with open(save_to, "w") as wf:
         print(page, file=wf)  
     return save_to  

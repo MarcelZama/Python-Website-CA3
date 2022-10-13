@@ -1,4 +1,4 @@
-from flask import Flask, session
+from flask import Flask, session, render_template, request
 
 import os
 import swimclub
@@ -11,13 +11,10 @@ app.secret_key = (
 
 @app.get("/")  # The @ symbol is a Python decorator.
 def homepage():
-    ## 1 / 0
-    return "Hello from your first webapp.  Alnost too exciting, eh?"
-
-
-@app.get("/about")
-def display_about_message():
-    return "This is the about page for this site."
+    return render_template(
+        "index.html",
+        title="Welcome to the Swimclub System",
+    )
 
 
 def get_data():
@@ -37,7 +34,26 @@ def get_data():
 def get_swimmers_names():
     if "swimmers" not in session:
         get_data()
-    return str(sorted(session["swimmers"]))
+    return render_template(
+        "select.html",
+        data=sorted(session["swimmers"]),
+        title="Please select a swimmer from the dropdown list",
+        select_id="swimmer",
+        url="/showfiles",
+    )
+
+
+@app.post("/showfiles")
+def show_swimmer_files():
+    name = request.form["swimmer"]
+    return get_swimmers_files(name)
+
+
+@app.post("/showchart")
+def show_event_chart():
+    event = request.form["event"]
+    swimclub.produce_bar_chart(event, "templates/")
+    return render_template(event.removesuffix("txt") + "html")
 
 
 @app.get("/files/<swimmer>")
@@ -47,7 +63,13 @@ def get_swimmers_files(swimmer):
     events = []
     for event in session["swimmers"][swimmer]:
         events.append(event["file"])
-    return events
+    return render_template(
+        "select.html",
+        data=events,
+        title="Please select an event from the dropdown list",
+        select_id="event",
+        url="/showchart",
+    )
 
 
 if __name__ == "__main__":
