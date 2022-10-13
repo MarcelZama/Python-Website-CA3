@@ -1,9 +1,12 @@
-from flask import Flask
+from flask import Flask, session
 
 import os
 import swimclub
 
 app = Flask(__name__)  # Creates a web server which can run your Flask code.and
+app.secret_key = (
+    "kjhfdskjhfsdghk;odgkjsdkjsdkgsdgjdsghdjgdghdfghdfgdfghfggdf;uaghdfgagf"
+)
 
 
 @app.get("/")  # The @ symbol is a Python decorator.
@@ -19,29 +22,30 @@ def display_about_message():
 
 def get_data():
     keys = ["age", "distance", "stroke", "average", "average_str", "times", "converts"]
-    swimmers = {}  # Empty dictionary.
+    session["swimmers"] = {}  # Empty dictionary.
     files = os.listdir(swimclub.FOLDER)
     files.remove(".DS_Store")
     for file in files:  # Process each file one at a time.
         name, *the_rest = swimclub.get_swim_data(file)  # Get the data.
-        if name not in swimmers:
-            swimmers[name] = []
-        swimmers[name].append({k: v for k, v in zip(keys, the_rest)})
-        swimmers[name][-1]["file"] = file
-    return swimmers 
+        if name not in session["swimmers"]:
+            session["swimmers"][name] = []
+        session["swimmers"][name].append({k: v for k, v in zip(keys, the_rest)})
+        session["swimmers"][name][-1]["file"] = file
 
 
 @app.get("/swimmers")
 def get_swimmers_names():
-    swimmers = get_data()
-    return str(sorted(swimmers))
+    if "swimmers" not in session:
+        get_data()
+    return str(sorted(session["swimmers"]))
 
 
 @app.get("/files/<swimmer>")
 def get_swimmers_files(swimmer):
-    swimmers = get_data()
+    if "swimmers" not in session:
+        get_data()
     events = []
-    for event in swimmers[swimmer]:  # a list of dictionaries, with "file" as a key
+    for event in session["swimmers"][swimmer]:
         events.append(event["file"])
     return events
 
