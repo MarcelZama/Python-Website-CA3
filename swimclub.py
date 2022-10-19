@@ -53,6 +53,7 @@ def produce_bar_chart(fn, location=CHARTS):
             <title>
                 {title}
             </title>
+            <link rel="stylesheet" href="/static/webapp.css">
         </head>
         <body>
             <h3>{title}</h3>

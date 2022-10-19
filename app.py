@@ -13,7 +13,7 @@ app.secret_key = (
 def homepage():
     return render_template(
         "index.html",
-        title="Welcome to the Swimclub System",
+        title="Welcome to Swimclub",
     )
 
 
