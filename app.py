@@ -7,6 +7,7 @@ app = Flask(__name__)  # Creates a web server which can run your Flask code.and
 app.secret_key = (
     "kjhfdskjhfsdghk;odgkjsdkjsdkgsdgjdsghdjgdghdfghdfgdfghfggdf;uaghdfgagf"
 )
+app.config["SESSION_TYPE"] = "filessystem"
 
 
 @app.get("/")  # The @ symbol is a Python decorator.
@@ -18,12 +19,15 @@ def homepage():
 
 
 def get_data():
+    session.clear()  # Just being safe.
     keys = ["age", "distance", "stroke", "average", "average_str", "times", "converts"]
     session["swimmers"] = {}  # Empty dictionary.
     files = os.listdir(swimclub.FOLDER)
     files.remove(".DS_Store")
     for file in files:  # Process each file one at a time.
-        name, *the_rest = swimclub.get_swim_data(file)  # Get the data.
+        name, *the_rest, _times, _converts = swimclub.get_swim_data(
+            file
+        )  # Get the data.
         if name not in session["swimmers"]:
             session["swimmers"][name] = []
         session["swimmers"][name].append({k: v for k, v in zip(keys, the_rest)})

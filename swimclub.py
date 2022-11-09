@@ -7,9 +7,9 @@ FOLDER = "swimdata/"
 def get_swim_data(fn):
     swimmer, age, distance, stroke = fn.removesuffix(".txt").split("-")
 
-    with open(FOLDER+fn) as df:
+    with open(FOLDER + fn) as df:
         data = df.readlines()
-    times = data[0].strip().split(",") 
+    times = data[0].strip().split(",")
     converts = []  # This is an empty list.
     for t in times:
         if ":" in t:
@@ -18,12 +18,12 @@ def get_swim_data(fn):
         else:
             mins = 0
             secs, hundredths = t.split(".")  # Dave.
-        converts.append((int(mins)*60*100) + (int(secs)*100) + int(hundredths))
+        converts.append((int(mins) * 60 * 100) + (int(secs) * 100) + int(hundredths))
     average = statistics.mean(converts)
-    mins = int( ( average // 60 ) // 100 )
-    remainder = average - ( mins * 60 * 100 )
-    secs = int(( remainder // 100 ))
-    hundredths = int(round(remainder - ( secs * 100 ), 0))
+    mins = int((average // 60) // 100)
+    remainder = average - (mins * 60 * 100)
+    secs = int((remainder // 100))
+    hundredths = int(round(remainder - (secs * 100), 0))
     average_str = f"{mins}:{secs}.{hundredths}"
     return swimmer, age, distance, stroke, average, average_str, times, converts
 
@@ -42,8 +42,17 @@ CHARTS = "charts/"
 
 
 def produce_bar_chart(fn, location=CHARTS):
-    swimmer, age, distance, stroke, average, average_str, times, converts = get_swim_data(fn)
-    
+    (
+        swimmer,
+        age,
+        distance,
+        stroke,
+        average,
+        average_str,
+        times,
+        converts,
+    ) = get_swim_data(fn)
+
     title = f"{swimmer} (Under {age}) {distance} {stroke}"
 
     header = f""" 
@@ -66,17 +75,17 @@ def produce_bar_chart(fn, location=CHARTS):
                 <svg height="30" width="400">
                     <rect height="30" width="{ bar_width }" style="fill:rgb(0,0,255);" />
                 </svg>{ t }<br />
-        """    
+        """
         body = svg + body
 
     footer = f""" 
             <p>Average time: {average_str}</p>
         </body>
     </html>
-    """    
+    """
 
     page = header + body + footer
     save_to = f"{location}{fn.removesuffix('.txt')}.html"
     with open(save_to, "w") as wf:
-        print(page, file=wf)  
-    return save_to  
+        print(page, file=wf)
+    return save_to
