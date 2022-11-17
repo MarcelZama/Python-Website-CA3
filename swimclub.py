@@ -1,5 +1,7 @@
 import statistics
 
+from records import records
+
 
 FOLDER = "swimdata/"
 
@@ -42,6 +44,15 @@ CHARTS = "charts/"
 
 
 def produce_bar_chart(fn, location=CHARTS):
+
+    conversion = {
+        "Fly": "butterfly",
+        "Back": "backstroke",
+        "Breast": "breastsroke",
+        "Free": "freestyle",
+        "IM": "individual medley",
+    }
+
     (
         swimmer,
         age,
@@ -78,8 +89,18 @@ def produce_bar_chart(fn, location=CHARTS):
         """
         body = svg + body
 
+    stroke = conversion[fn.removesuffix(".txt").split("-")[-1]]
+    distance = fn.removesuffix(".txt").split("-")[-2]
+    event = f"{distance} {stroke}"
+
+    lcmen = records["LCMen"][event]
+    lcwomen = records["LCWomen"][event]
+    scmen = records["SCMen"][event]
+    scwomen = records["SCWomen"][event]
+
     footer = f""" 
             <p>Average time: {average_str}</p>
+            M: {lcmen} ({scmen})<br />W: {lcwomen} ({scwomen})
         </body>
     </html>
     """
