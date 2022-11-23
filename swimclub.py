@@ -48,7 +48,7 @@ def produce_bar_chart(fn, location=CHARTS):
     conversion = {
         "Fly": "butterfly",
         "Back": "backstroke",
-        "Breast": "breastsroke",
+        "Breast": "breaststroke",
         "Free": "freestyle",
         "IM": "individual medley",
     }
