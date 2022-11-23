@@ -4,6 +4,7 @@ import pprint
 URL = "https://en.wikipedia.org/wiki/List_of_world_records_in_swimming"
 RECORDS = (0, 1, 3, 4)
 COURSES = ("LCMen", "LCWomen", "SCMen", "SCWomen")
+WHERE = "/home/swimmingcoach/webapp"
 
 html = gazpacho.get(URL)
 soup = gazpacho.Soup(html)
@@ -17,6 +18,6 @@ for table, course in zip(RECORDS, COURSES):
         cols = row.find("td")
         records[course][cols[0].text] = cols[1].text
 
-with open("records.py", "w", encoding="utf-8") as wf:
+with open(WHERE+"records.py", "w", encoding="utf-8") as wf:
     print("records = ", end="", file=wf)
     pprint.pprint(records, stream=wf)
