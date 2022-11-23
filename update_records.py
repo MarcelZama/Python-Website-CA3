@@ -4,7 +4,7 @@ import pprint
 URL = "https://en.wikipedia.org/wiki/List_of_world_records_in_swimming"
 RECORDS = (0, 1, 3, 4)
 COURSES = ("LCMen", "LCWomen", "SCMen", "SCWomen")
-WHERE = "/home/swimmingcoach/webapp"
+WHERE = "/home/swimmingcoach/webapp/"
 
 html = gazpacho.get(URL)
 soup = gazpacho.Soup(html)
