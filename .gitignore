@@ -3,3 +3,4 @@ swimdata/
 __pycache__/
 .vscode/
 templates/*-*.html
+*.sqlite3
