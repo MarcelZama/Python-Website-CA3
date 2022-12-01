@@ -3,6 +3,15 @@ from flask import Flask, session, render_template, request
 import os
 import swimclub
 
+import DBcm
+
+config = {
+    "user": "swimuser",
+    "password": "swimpasswd",
+    "host": "localhost",
+    "database": "swimdataDB",
+} 
+
 app = Flask(__name__)  # Creates a web server which can run your Flask code.and
 app.secret_key = (
     "kjhfdskjhfsdghk;odgkjsdkjsdkgsdgjdsghdjgdghdfghdfgdfghfggdf;uaghdfgagf"
@@ -36,11 +45,16 @@ def get_data():
 
 @app.get("/swimmers")
 def get_swimmers_names():
-    if "swimmers" not in session:
-        get_data()
+    
+    SQL = "select name from swimmers"
+    with DBcm.UseDatabase(config) as db:
+        db.execute(SQL)
+        results = db.fetchall()
+    names = [ t[0] for t in results ] 
+
     return render_template(
         "select.html",
-        data=sorted(session["swimmers"]),
+        data=sorted(names),
         title="Please select a swimmer from the dropdown list",
         select_id="swimmer",
         url="/showfiles",
