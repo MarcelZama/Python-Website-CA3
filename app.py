@@ -10,7 +10,7 @@ config = {
     "password": "swimpasswd",
     "host": "localhost",
     "database": "swimdataDB",
-} 
+}
 
 app = Flask(__name__)  # Creates a web server which can run your Flask code.and
 app.secret_key = (
@@ -45,12 +45,12 @@ def get_data():
 
 @app.get("/swimmers")
 def get_swimmers_names():
-    
+
     SQL = "select name from swimmers"
     with DBcm.UseDatabase(config) as db:
         db.execute(SQL)
-        results = db.fetchall() # a list of tuples.
-    names = [ t[0] for t in results ] # a list of names.
+        results = db.fetchall()  # a list of tuples.
+    names = [t[0] for t in results]  # a list of names.
 
     return render_template(
         "select.html",
@@ -74,17 +74,17 @@ def show_swimmer_files():
     """
 
     with DBcm.UseDatabase(config) as db:
-        db.execute(SQL, (name, ))
-        results = db.fetchall() # a list of tuples.
-    events = [ t[0]+"-"+t[1] for t in results ] # a list of swimming events.
+        db.execute(SQL, (name,))
+        results = db.fetchall()  # a list of tuples.
+    events = [t[0] + "-" + t[1] for t in results]  # a list of swimming events.
 
     return render_template(
-            "select.html",
-            data=events,
-            title="Please select an event from the dropdown list",
-            select_id="event",
-            url="/showchart",
-        )
+        "select.html",
+        data=events,
+        title="Please select an event from the dropdown list",
+        select_id="event",
+        url="/showchart",
+    )
 
 
 @app.post("/showchart")
