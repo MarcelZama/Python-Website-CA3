@@ -3,6 +3,9 @@ from flask import Flask, session, render_template, request
 import os
 import data_utils
 
+from records import records
+
+
 app = Flask(__name__)  # Creates a web server which can run your Flask code.and
 app.secret_key = (
     "kjhfdskjhfsdghk;odgkjsdkjsdkgsdgjdsghdjgdghdfghdfgdfghfggdf;uaghdfgagf"
@@ -49,7 +52,14 @@ def get_swimmers_names():
 @app.post("/showevents")
 def show_swimmer_files():
     name = request.form["swimmer"]
-    events = data_utils.get_swimmer_events(name)
+
+    data = data_utils.get_swimmer_data(name)  # A list of three-tuples.
+    events = [t[0] + "-" + t[1] for t in data]  # A list of events.
+    ages = list(set([t[-1] for t in data]))  # A list of unique ages.
+
+    session["swimmer"] = name
+    session["age"] = ages[0]  # The first age from the unique list.
+
     return render_template(
         "select.html",
         data=events,
@@ -59,11 +69,55 @@ def show_swimmer_files():
     )
 
 
+def convert2range(v, f_min, f_max, t_min, t_max):
+    """Given a value (v) in the range f_min-f_max, convert the value
+    to its equivalent value in the range t_min-t_max.
+
+    Based on the technique described here:
+        http://james-ramsden.com/map-a-value-from-one-number-scale-to-another-formula-and-c-code/
+    """
+    return round(t_min + (t_max - t_min) * ((v - f_min) / (f_max - f_min)), 2)
+
+
 @app.post("/showchart")
 def show_event_chart():
+    conversion = {
+        "Fly": "butterfly",
+        "Back": "backstroke",
+        "Breast": "breaststroke",
+        "Free": "freestyle",
+        "IM": "individual medley",
+    }
+
     event = request.form["event"]
-    swimclub.produce_bar_chart(event, "templates/")
-    return render_template(event.removesuffix("txt") + "html")
+
+    distance, stroke = event.split("-")
+    the_stroke = conversion[stroke]
+
+    the_event = f"{distance} {the_stroke}"
+
+    lcmen = records["LCMen"][the_event]
+    lcwomen = records["LCWomen"][the_event]
+    scmen = records["SCMen"][the_event]
+    scwomen = records["SCWomen"][the_event]
+
+    swimmer = session["swimmer"]
+    age = session["age"]
+
+    average_str, times, converts = data_utils.get_chart_data(swimmer, age, event)
+    the_converts = [convert2range(c, 0, max(converts), 0, 350) for c in converts]
+
+    chart_data = list(zip(times, the_converts))
+
+    the_title = f"{swimmer} (Under {age}) {event}"
+
+    return render_template(
+        "chart.html",
+        title=the_title,
+        data=chart_data,
+        average=average_str,
+        worlds=[lcmen, lcwomen, scmen, scwomen],
+    )
 
 
 if __name__ == "__main__":
