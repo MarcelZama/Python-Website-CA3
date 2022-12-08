@@ -35,9 +35,23 @@ def get_data():
         session["swimmers"][name][-1]["file"] = file
 
 
-@app.get("/swimmers")
+@app.get("/sessions")
+def get_session_list():
+    sessions = [row[0].isoformat().split("T")[0] for row in data_utils.get_list_of_sessions()]
+    return render_template(
+        "select.html",
+        data=sorted(sessions, reverse=True),
+        title="Please select a swim session to filter on",
+        select_id="the_session",
+        url="/swimmers",
+    )
+
+
+@app.post("/swimmers")
 def get_swimmers_names():
-    names = data_utils.get_swimmers_list()
+    the_session = request.form["the_session"]
+    session["the_session"] = the_session # Let's remember this value.
+    names = data_utils.get_swimmers_list_by_session(the_session)
     return render_template(
         "select.html",
         data=sorted(names),

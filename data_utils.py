@@ -31,7 +31,7 @@ def get_swimmers_list():
 
 
 def get_swimmer_data(name):
-    SQL = """ 
+    SQL = """  
         select distinct strokes.distance, strokes.stroke, swimmers.age
         from swimmers, strokes, times
         where times.swimmer_id = swimmers.id and
@@ -83,3 +83,25 @@ def get_chart_data(name, age, event):
     hundredths = int(round(remainder - (secs * 100), 0))
     average_str = f"{mins}:{secs}.{hundredths}"
     return average_str, times, converts
+
+
+def get_list_of_sessions():
+    SQL = "select distinct ts from times"
+    with DBcm.UseDatabase(config) as db:
+        db.execute(SQL)
+        results = db.fetchall()
+    return results
+
+
+def get_swimmers_list_by_session(the_session):
+    SQL = """
+        select distinct swimmers.name   
+        from times, swimmers 
+        where date_format(times.ts, "%Y-%m-%d") = %s and     
+        times.swimmer_id = swimmers.id 
+        order by name ;
+    """
+    with DBcm.UseDatabase(config) as db:
+        db.execute(SQL, (the_session,))
+        results = db.fetchall()
+        return [row[0] for row in results]
