@@ -3,8 +3,6 @@ from flask import Flask, session, render_template, request
 import os
 import data_utils
 
-from records import records
-
 
 app = Flask(__name__)  # Creates a web server which can run your Flask code.and
 app.secret_key = (
@@ -79,36 +77,29 @@ def convert2range(v, f_min, f_max, t_min, t_max):
     return round(t_min + (t_max - t_min) * ((v - f_min) / (f_max - f_min)), 2)
 
 
+conversion = {
+    "Fly": "butterfly",
+    "Back": "backstroke",
+    "Breast": "breaststroke",
+    "Free": "freestyle",
+    "IM": "individual medley",
+}
+
+
 @app.post("/showchart")
 def show_event_chart():
-    conversion = {
-        "Fly": "butterfly",
-        "Back": "backstroke",
-        "Breast": "breaststroke",
-        "Free": "freestyle",
-        "IM": "individual medley",
-    }
-
     event = request.form["event"]
-
     distance, stroke = event.split("-")
     the_stroke = conversion[stroke]
-
     the_event = f"{distance} {the_stroke}"
 
-    lcmen = records["LCMen"][the_event]
-    lcwomen = records["LCWomen"][the_event]
-    scmen = records["SCMen"][the_event]
-    scwomen = records["SCWomen"][the_event]
+    lcmen, lcwomen, scmen, scwomen = data_utils.get_world_records(the_event)
 
     swimmer = session["swimmer"]
     age = session["age"]
-
     average_str, times, converts = data_utils.get_chart_data(swimmer, age, event)
     the_converts = [convert2range(c, 0, max(converts), 0, 350) for c in converts]
-
     chart_data = list(zip(times, the_converts))
-
     the_title = f"{swimmer} (Under {age}) {event}"
 
     return render_template(

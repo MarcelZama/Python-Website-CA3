@@ -2,12 +2,23 @@ import statistics
 
 import DBcm
 
+from records import records
+
+
 config = {
     "user": "swimuser",
     "password": "swimpasswd",
     "host": "localhost",
     "database": "swimdataDB",
 }
+
+
+def get_world_records(event):
+    lcmen = records["LCMen"][event]
+    lcwomen = records["LCWomen"][event]
+    scmen = records["SCMen"][event]
+    scwomen = records["SCWomen"][event]
+    return lcmen, lcwomen, scmen, scwomen
 
 
 def get_swimmers_list():
