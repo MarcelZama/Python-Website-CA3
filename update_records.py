@@ -18,6 +18,6 @@ for table, course in zip(RECORDS, COURSES):
         cols = row.find("td")
         records[course][cols[0].text] = cols[1].text
 
-with open(WHERE+"records.py", "w", encoding="utf-8") as wf:
+with open(WHERE + "records.py", "w", encoding="utf-8") as wf:
     print("records = ", end="", file=wf)
     pprint.pprint(records, stream=wf)

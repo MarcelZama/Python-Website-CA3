@@ -37,7 +37,9 @@ def get_data():
 
 @app.get("/sessions")
 def get_session_list():
-    sessions = [row[0].isoformat().split("T")[0] for row in data_utils.get_list_of_sessions()]
+    sessions = [
+        row[0].isoformat().split("T")[0] for row in data_utils.get_list_of_sessions()
+    ]
     return render_template(
         "select.html",
         data=sorted(sessions, reverse=True),
@@ -50,7 +52,7 @@ def get_session_list():
 @app.post("/swimmers")
 def get_swimmers_names():
     the_session = request.form["the_session"]
-    session["the_session"] = the_session # Let's remember this value.
+    session["the_session"] = the_session  # Let's remember this value.
     names = data_utils.get_swimmers_list_by_session(the_session)
     return render_template(
         "select.html",
