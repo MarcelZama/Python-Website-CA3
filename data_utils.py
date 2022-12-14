@@ -21,31 +21,38 @@ def get_world_records(event):
     return lcmen, lcwomen, scmen, scwomen
 
 
-def get_swimmers_list():
-    SQL = "select name from swimmers"
-    with DBcm.UseDatabase(config) as db:
-        db.execute(SQL)
-        results = db.fetchall()  # a list of tuples.
-    names = [t[0] for t in results]  # a list of names.
-    return names
+# def get_swimmers_list():
+#     SQL = "select name from swimmers"
+#     with DBcm.UseDatabase(config) as db:
+#         db.execute(SQL)
+#         results = db.fetchall()  # a list of tuples.
+#     names = [t[0] for t in results]  # a list of names.
+#     return names
 
 
-def get_swimmer_data(name):
+def get_swimmer_data(name, the_session):
     SQL = """  
         select distinct strokes.distance, strokes.stroke, swimmers.age
         from swimmers, strokes, times
         where times.swimmer_id = swimmers.id and
         times.stroke_id = strokes.id and
-        swimmers.name = %s;
+        swimmers.name = %s and
+        date_format(times.ts, "%Y-%m-%d") = %s
     """
     with DBcm.UseDatabase(config) as db:
-        db.execute(SQL, (name,))
+        db.execute(
+            SQL,
+            (
+                name,
+                the_session,
+            ),
+        )
         results = db.fetchall()  # a list of tuples.
     ## events = [t[0] + "-" + t[1] for t in results]  # a list of swimming events.
     return results
 
 
-def get_chart_data(name, age, event):
+def get_chart_data(name, age, event, the_session):
     distance, stroke = event.split("-")
     SQL = """
         select swimmers.name, swimmers.age, times.time, strokes.distance, strokes.stroke, times.ts
@@ -53,7 +60,8 @@ def get_chart_data(name, age, event):
         where (swimmers.name = %s and swimmers.age = %s) and
         (strokes.distance = %s and strokes.stroke = %s) and 
         swimmers.id = times.swimmer_id and
-        strokes.id = times.stroke_id
+        strokes.id = times.stroke_id and
+        date_format(times.ts, "%Y-%m-%d") = %s
     """
     with DBcm.UseDatabase(config) as db:
         db.execute(
@@ -63,6 +71,7 @@ def get_chart_data(name, age, event):
                 age,
                 distance,
                 stroke,
+                the_session,
             ),
         )
         results = db.fetchall()

@@ -19,30 +19,30 @@ def homepage():
     )
 
 
-def get_data():
-    session.clear()  # Just being safe.
-    keys = ["age", "distance", "stroke", "average", "average_str", "times", "converts"]
-    session["swimmers"] = {}  # Empty dictionary.
-    files = os.listdir(swimclub.FOLDER)
-    files.remove(".DS_Store")
-    for file in files:  # Process each file one at a time.
-        name, *the_rest, _times, _converts = swimclub.get_swim_data(
-            file
-        )  # Get the data.
-        if name not in session["swimmers"]:
-            session["swimmers"][name] = []
-        session["swimmers"][name].append({k: v for k, v in zip(keys, the_rest)})
-        session["swimmers"][name][-1]["file"] = file
+# def get_data():
+#     session.clear()  # Just being safe.
+#     keys = ["age", "distance", "stroke", "average", "average_str", "times", "converts"]
+#     session["swimmers"] = {}  # Empty dictionary.
+#     files = os.listdir(swimclub.FOLDER)
+#     files.remove(".DS_Store")
+#     for file in files:  # Process each file one at a time.
+#         name, *the_rest, _times, _converts = swimclub.get_swim_data(
+#             file
+#         )  # Get the data.
+#         if name not in session["swimmers"]:
+#             session["swimmers"][name] = []
+#         session["swimmers"][name].append({k: v for k, v in zip(keys, the_rest)})
+#         session["swimmers"][name][-1]["file"] = file
 
 
 @app.get("/sessions")
 def get_session_list():
-    sessions = [
+    session_dates = [
         row[0].isoformat().split("T")[0] for row in data_utils.get_list_of_sessions()
     ]
     return render_template(
         "select.html",
-        data=sorted(sessions, reverse=True),
+        data=sorted(session_dates, reverse=True),
         title="Please select a swim session to filter on",
         select_id="the_session",
         url="/swimmers",
@@ -67,7 +67,9 @@ def get_swimmers_names():
 def show_swimmer_files():
     name = request.form["swimmer"]
 
-    data = data_utils.get_swimmer_data(name)  # A list of three-tuples.
+    data = data_utils.get_swimmer_data(
+        name, session["the_session"]
+    )  # A list of three-tuples.
     events = [t[0] + "-" + t[1] for t in data]  # A list of events.
     ages = list(set([t[-1] for t in data]))  # A list of unique ages.
 
@@ -111,12 +113,17 @@ def show_event_chart():
 
     lcmen, lcwomen, scmen, scwomen = data_utils.get_world_records(the_event)
 
+    the_session = session["the_session"]
+
     swimmer = session["swimmer"]
     age = session["age"]
-    average_str, times, converts = data_utils.get_chart_data(swimmer, age, event)
+    average_str, times, converts = data_utils.get_chart_data(
+        swimmer, age, event, the_session
+    )
     the_converts = [convert2range(c, 0, max(converts), 0, 350) for c in converts]
     chart_data = list(zip(times, the_converts))
-    the_title = f"{swimmer} (Under {age}) {event}"
+
+    the_title = f"{swimmer} (Under {age}) {event} - {the_session}"
 
     return render_template(
         "chart.html",
