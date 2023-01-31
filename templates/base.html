@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
     <head>
         <title>{{ title }}</title>
@@ -13,5 +13,49 @@
 
         <hr>
         <p class="footer">Copyright 2022-2023 (c) by Paul Barry.</p>
+    </body>
+</html> -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="/static/webapp.css">
+     </head>
+
+    <body>
+
+        <section class="section">
+            <div class="container">
+                <div class="select is-large">
+                    <select name="session" hx-trigger="change, load" hx-get="/swimmers" hx-target="#swimmers">
+                        {% for name in data %}
+                        <option value="{{ name }}">{{ name }}</option>
+                        {% endfor %}
+                        <!-- <select name="{{ select_id }}" id="{{ select_id }}" hx-trigger="change, load" hx-get="/" hx-target="#the_session">
+
+                            {% for name in data %}
+                                <option value="{{ name }}">{{ name }}</option>
+                            {% endfor %}-->
+                       
+                        </select>
+                    </select>
+                </div>
+                <div class="select is-large">
+                    <select id="swimmers">
+                        
+                    </select>
+                </div>
+                <div class="select is-large">
+                    <select id="event">
+
+                    </select>
+                </div>
+            </div>
+          </section>
+        
+          <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
+
+        <hr>
+        <p class="footer">Copyright 2022-2023 (c) by Paul Barry.</br>Edited by Marcel Zama</p>
     </body>
 </html>
