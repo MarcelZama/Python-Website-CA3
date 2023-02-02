@@ -1,114 +1,16 @@
-<!-- <!DOCTYPE html>
-<html>
-    <head>
-        <title>{{ title }}</title>
-        <link rel="stylesheet" href="/static/webapp.css">
-     </head>
-
-    <body>
-        <h3>{{ title }}</h3>
-
-        {% block body %}
-        {% endblock %}
-
-        <hr>
-        <p class="footer">Copyright 2022-2023 (c) by Paul Barry.</p>
-    </body>
-</html> -->
-<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-<!-- <!DOCTYPE html>
-<html>
-    <head>
-        <title>{{ title }}</title>
-        <link rel="stylesheet" href="/static/webapp.css">
-     </head>
-
-    <body>
-
-        <section class="section">
-            <div class="container">
-                <div class="select is-large">
-                    <select name="session" hx-trigger="change, load" hx-get="/swimmers2" hx-target="#swimmers">
-                        {% for name in data %}
-                        <option value="{{ name }}">{{ name }}</option>
-                        {% endfor %}
-                        </select>
-                    </select>
-                </div>
-                <div class="select is-large">
-                    <select id="swimmers">
-                    </select>
-                </div>
-                <div class="select is-large">
-                    <select id="event">
-                    </select>
-                </div>
-            </div>
-          </section>
-        
-          <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
-
-        <hr>
-        <p class="footer">Copyright 2022-2023 (c) by Paul Barry.</br>Edited by Marcel Zama</p>
-    </body>
-</html> -->
-<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-<!-- <!DOCTYPE html>
-<html>
-    <head>
-        <title>{{ title }}</title>
-        <link rel="stylesheet" href="/static/webapp.css">
-        <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
-     </head>
-
-    <body>
-
-        <section>
-            <div>
-                <div>
-                    <select name="sessionselect" hx-trigger="change" hx-get="/swimmers1" hx-target="#swimmers" placeholder="Search...">
-                        !-- <select htmx-onchange="select[name='swimmers']/value=/swimmers2"> --
-                        <option value="name">PlaceHolder</option>
-                        {% for name in data %}
-                        <option value="{{ name }}">{{ name }}</option>
-                        {% endfor %}
-                        </select>
-                    </select>
-                </div>
-                <div>
-                    !-- <select name="swimmers" id="swimmers" hx-trigger="change" hx-get="/showevents" hx-target="#event"> -
-                    <select name="swimmers" id="swimmers">
-                        {% for name in data %}
-                            <option value="{{ name }}">{{ name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div>
-                    <select id="event">
-                    </select>
-                </div>
-            </div>
-        </section>
-        
-
-        <hr>
-        <p class="footer">Copyright 2022-2023 (c) by Paul Barry.</br>Edited by Marcel Zama</p>
-    </body>
-</html>  -->
-<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dropdown</title>
     <link rel="stylesheet" href="/static/webapp.css">
+    <script src="https://unpkg.com/htmx.org@1.8.5%22%3E</script>
   </head>
   <body>
   <section>
     <div>
         <div>
-            <select name="language" hx-trigger="change, load" hx-get="/frameworks" hx-target="#frameworks">
+            <select name="the_session" hx-trigger="change" hx-post="/swimmers" hx-target="#swimmers">
                 <option value="other}">Placeholder</option>
                 {% for name in data %}
                     <option value="{{ name }}">{{ name }}</option>
@@ -116,37 +18,18 @@
             </select>
           </div>
           <div>
-            <select id="frameworks">
+            <select name="swimmer" id="swimmers" hx-trigger="change" hx-post="/showevents" hx-target="#event">
+                <option value="other}">Placeholder</option>
             </select>
+          </div>
+          <div>
+            <select name="event" id="event" hx-trigger="change" hx-post="/showchart" hx-target="#showchart">
+                <option value="other}">Placeholder</option>
+            </select>
+          </div>
+          <div id="showchart" name="chart">
           </div>
     </div>
   </section>
-  <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
-  </body>
-</html> -->
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dropdown</title>
-  </head>
-  <body>
-  <section class="section">
-    <div class="container">
-        <div class="select is-large">
-            <select name="language" hx-trigger="change, load" hx-get="/frameworks" hx-target="#frameworks">
-                <option value="Python">Python</option>
-                <option value="Ruby">Ruby</option>
-                <option value="JavaScript">JavaScript</option>
-            </select>
-          </div>
-          <div class="select is-large">
-            <select id="frameworks">
-            </select>
-          </div>
-    </div>
-  </section>
-  <script src="https://unpkg.com/htmx.org@1.8.5" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w" crossorigin="anonymous"></script>
   </body>
 </html>

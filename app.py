@@ -12,19 +12,24 @@ app.config["SESSION_TYPE"] = "filessystem"
 
 
 languages_frameworks = {
-    'Python': ['Django', 'Flask', 'FastAPI'], 
-    'Ruby': ['Rails', 'Sinatra'], 
-    'JavaScript': ['Express', 'Hapi']}
+    "Python": ["Django", "Flask", "FastAPI"],
+    "Ruby": ["Rails", "Sinatra"],
+    "JavaScript": ["Express", "Hapi"],
+}
 
-@app.get('/')
+
+@app.get("/")
 def dropdown():
-    return render_template('base.html')
+    return render_template("base.html")
 
-@app.get('/frameworks')
+
+@app.get("/frameworks")
 def frameworks():
-    language = request.args.get('language')
+    language = request.args.get("language")
     list_of_frameworks = languages_frameworks[language]
-    return render_template('first.html', list_of_frameworks=list_of_frameworks)
+    return render_template("first.html", list_of_frameworks=list_of_frameworks)
+
+
 # def get_data():
 #     session.clear()  # Just being safe.
 #     keys = ["age", "distance", "stroke", "average", "average_str", "times", "converts"]
@@ -52,6 +57,7 @@ def frameworks():
 #     language = request.args.get('language')
 #     list_of_frameworks = data_utils.get_swimmers_list_by_session[language]
 #     return render_template('first.html', list_of_frameworks=list_of_frameworks)
+
 
 @app.get("/sessions")
 def get_session_list():
