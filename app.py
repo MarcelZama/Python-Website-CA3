@@ -11,23 +11,12 @@ app.secret_key = (
 app.config["SESSION_TYPE"] = "filessystem"
 
 
-languages_frameworks = {
-    "Python": ["Django", "Flask", "FastAPI"],
-    "Ruby": ["Rails", "Sinatra"],
-    "JavaScript": ["Express", "Hapi"],
-}
-
-
-@app.get("/")
-def dropdown():
-    return render_template("base.html")
-
-
-@app.get("/frameworks")
-def frameworks():
-    language = request.args.get("language")
-    list_of_frameworks = languages_frameworks[language]
-    return render_template("first.html", list_of_frameworks=list_of_frameworks)
+# @app.get("/")  # The @ symbol is a Python decorator.
+# def homepage():
+#     return render_template(
+#         "base.html",
+#         title="Welcome to Swimclub",
+#     )
 
 
 # def get_data():
@@ -45,27 +34,14 @@ def frameworks():
 #         session["swimmers"][name].append({k: v for k, v in zip(keys, the_rest)})
 #         session["swimmers"][name][-1]["file"] = file
 
-# @app.get('/')
-# def dropdown():
-#     session_dates = [
-#         row[0].isoformat().split("T")[0] for row in data_utils.get_list_of_sessions()
-#     ]
-#     return render_template('base.html',data=sorted(session_dates, reverse=True),)
 
-# @app.get('/frameworks')
-# def frameworks():
-#     language = request.args.get('language')
-#     list_of_frameworks = data_utils.get_swimmers_list_by_session[language]
-#     return render_template('first.html', list_of_frameworks=list_of_frameworks)
-
-
-@app.get("/sessions")
+@app.get("/")
 def get_session_list():
     session_dates = [
         row[0].isoformat().split("T")[0] for row in data_utils.get_list_of_sessions()
     ]
     return render_template(
-        "select.html",
+        "base.html",
         data=sorted(session_dates, reverse=True),
         # title="Please select a swim session to filter on",
         # select_id="the_session",
@@ -81,9 +57,9 @@ def get_swimmers_names():
     return render_template(
         "select.html",
         data=sorted(names),
-        title="Please select a swimmer from the dropdown list",
-        select_id="swimmer",
-        url="/showevents",
+        # title="Please select a swimmer from the dropdown list",
+        # select_id="swimmer",
+        # url="/showevents",
     )
 
 
@@ -100,12 +76,14 @@ def show_swimmer_files():
     session["swimmer"] = name
     session["age"] = ages[0]  # The first age from the unique list.
 
+    events.insert(0, "-")
+
     return render_template(
         "select.html",
         data=events,
-        title="Please select an event from the dropdown list",
-        select_id="event",
-        url="/showchart",
+        # title="Please select an event from the dropdown list",
+        # select_id="event",
+        # url="/showchart",
     )
 
 
@@ -151,7 +129,7 @@ def show_event_chart():
 
     return render_template(
         "chart.html",
-        title=the_title,
+        # title=the_title,
         data=chart_data,
         average=average_str,
         worlds=[lcmen, lcwomen, scmen, scwomen],
