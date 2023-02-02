@@ -1,0 +1,14 @@
+<!-- <select class="custom-select">
+    <option selected>Choose the swimmer</option>
+
+    {% for name in data %}
+            <option value="{{ name }}">{{ name }}</option>
+    {% endfor %}
+</select> -->
+<select class="custom-select">
+    <option selected>Choose your swimmer</option>
+    
+    {% for name in swimmer %}
+        <option value="{{name}}">{{ name }}</option>
+    {% endfor %}
+</select>

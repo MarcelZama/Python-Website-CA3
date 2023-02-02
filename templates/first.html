@@ -1,4 +1,34 @@
+<!-- <select class="custom-select">
+    <option selected>Choose the swimmer</option>
 
-        {% for name in data %}
+    {% for name in data %}
             <option value="{{ name }}">{{ name }}</option>
-        {% endfor %}
+    {% endfor %}
+</select> -->
+<!-- {% extends 'base.html' %} 
+
+{% block content %}
+To begin, select a <a href="/sessions">session</a>.
+<select class="custom-select mb-4"
+        name="name"
+        hx-get="{% url 'session' %}" 
+        hx-trigger="change" 
+        hx-target="#session">
+
+    <option selected>Open this select menu</option>
+    {% for name in data %}
+        <option value="{{name}}">{{ name }}</option>
+    {% endfor %}
+</select>
+
+<div id="session">
+    {% include 'second.html' %} 
+</div>
+
+{% endblock %} -->
+<!-- {% for name in data %}
+<option value="{{ name }}">{{ name }}</option>
+{% endfor %} -->
+{% for framework in list_of_frameworks %}
+<option value="{{ framework }}">{{ framework }}</option>
+{% endfor %}
