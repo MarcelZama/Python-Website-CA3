@@ -1,7 +1,4 @@
-{% extends "base.html" %}
-
-{% block body %}
-
+<p>
     {% for row in data %}
         <svg height="30" width="400">
             <rect height="30" width="{{ row[1] }}" style="fill:rgb(0,0,255);" />
@@ -9,5 +6,4 @@
     {% endfor %}
     <p>Average time: {{ average }}</p>
     M: {{worlds[0]}} ({{worlds[2]}})<br />W: {{worlds[1]}} ({{worlds[3]}})
-
-{% endblock %}
+</p>
